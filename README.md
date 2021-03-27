@@ -10,15 +10,17 @@ Sempre que for fazer um commit das alterações para o branch main, será necess
 
 # Para criar um pull request
 Criar um branch não protegido (utilizar um nome sugestivo para o branch)
+
 	- git checkout -b 'Issue#00'
 		- comando git checkout <branch> troca o branch atual para o informado e o parametro [-b] cria o branch caso ele não exista
 	- git add *
 		- depois de fazer todas as alterações necessárias, adicionar as alterações para stage
 	- git commit -m <descrição das alterações realizadas>
 		- a mensagem do commit não precisa ser muito grande
-	- git push remote Issue#00
+	- git push origin Issue#00
 		- enviar as alterações do repositório local para o repositório remoto
 Criar o pull request no GitHub
+
 	 - Ir na aba Pull requests, e clique em "New pull request"
 	 - O branch base mantenha o mesmo, no compare selecione o branch que foi criado
 	 - Clicar no "Create pull request"
