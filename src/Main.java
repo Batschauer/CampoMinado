@@ -9,7 +9,7 @@ public class Main {
 			@Override
 			public void run()
 			{
-				//TODO
+				System.out.println("Hello World");
 			}
 		});
 	}
