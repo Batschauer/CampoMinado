@@ -19,7 +19,7 @@ public class TelaInicial implements ActionListener {
 		
 		frame = new JFrame("Campo Minado");
 		frame.setVisible(true);
-		frame.setSize(720, 310);
+		frame.setSize(620, 410);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		barra = new JMenuBar();
