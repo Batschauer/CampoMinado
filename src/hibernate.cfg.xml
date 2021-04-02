@@ -15,7 +15,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost/VALIDAR NOME DO BANCO E INCLUIR AQUI</property>
+        <property name="connection.url">jdbc:mysql://localhost/hibernate</property>
         <property name="connection.username">root</property>
         <property name="connection.password">root</property>
 
@@ -29,7 +29,7 @@
         <property name="show_sql">true</property>
         
         <!-- Names the annotated entity class -->
-        <mapping class="SUBSTITUIR PELO PACOTE.CLASSE"/>
+        <mapping class="campominado.Historico"/>
 
     </session-factory>
 
