@@ -10,6 +10,10 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 public class TelaHistorico extends JFrame implements ActionListener  {
 	
@@ -18,11 +22,13 @@ public class TelaHistorico extends JFrame implements ActionListener  {
 	JComboBox<String>comboBox;
 	JLabel label;
 	JButton buttonOk;
+	JTable tableHistorico;
 	
 	public TelaHistorico() {
 		
 		setTitle("Histórico");
 		setSize(280, 330);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		panelNorth = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		panelSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		
@@ -41,6 +47,32 @@ public class TelaHistorico extends JFrame implements ActionListener  {
 		
 		add(panelNorth, BorderLayout.NORTH);
 		add(panelSouth, BorderLayout.SOUTH);
+	
+		TableModel dataModel = (TableModel) new AbstractTableModel() {
+			
+			@Override
+			public int getColumnCount () {
+				return 2;
+			}
+
+			@Override
+			public int getRowCount() {
+				return 1;
+			}
+
+			@Override
+			public Object getValueAt(int rowIndex, int columnIndex) {
+				//implementar
+				return null;
+			}
+			
+			
+		};
+		
+		tableHistorico = new JTable(dataModel);
+		JScrollPane jp = new JScrollPane(tableHistorico);
+		
+		add(jp, BorderLayout.CENTER);
 		
 	}
 
@@ -48,17 +80,14 @@ public class TelaHistorico extends JFrame implements ActionListener  {
 	public void actionPerformed(ActionEvent e) {
 		
 		if(e.getActionCommand().equalsIgnoreCase("Ok")) {
-			//implementar
+			this.dispose();
 		}
 		
-		JComboBox cb = (JComboBox)e.getSource();
-        String selecionado = (String)cb.getSelectedItem();
-        
-        if(selecionado == "Fácil") {
+        if(comboBox.getSelectedItem() == "Fácil") {
         	//implementar
-        } else if (selecionado == "Médio") {
+        } else if (comboBox.getSelectedItem() == "Médio") {
         	//implementar
-        } else if (selecionado == "Difícil") {
+        } else if (comboBox.getSelectedItem() == "Difícil") {
         	//implementar
         }
 		

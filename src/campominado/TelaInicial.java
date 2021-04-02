@@ -1,10 +1,14 @@
 package campominado;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
 public class TelaInicial implements ActionListener {
 
@@ -14,6 +18,8 @@ public class TelaInicial implements ActionListener {
 	JMenuItem novoJogo, facil, medio, dificil, historico, sobre, sair;  
 	TelaSobre telaSobre;
 	TelaHistorico telaHistorico;
+	JPanel panelFacil, panelMedio, panelDificil;
+	JButton button;
 	
 	public TelaInicial () {
 		
@@ -59,17 +65,45 @@ public class TelaInicial implements ActionListener {
 		telaSobre = new TelaSobre();
 		telaHistorico = new TelaHistorico();
 		
+		panelFacil = new JPanel(new GridLayout (8, 10));
+		panelMedio = new JPanel(new GridLayout (12, 14));
+		panelDificil = new JPanel(new GridLayout (16, 18));
+		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		frame.getContentPane().removeAll();
+		frame.repaint();
+		panelFacil.removeAll();
+		panelMedio.removeAll();
+		panelDificil.removeAll();
+		
 		if (e.getSource() == facil) {
-			//implementar Novo Jogo Fácil
+			frame.setSize(400, 400);
+			for (int i=1; i<=80; i++) {
+				button = new JButton(i + "");
+				panelFacil.add(button);
+			}
+			frame.add(panelFacil);
+
 		} else if (e.getSource() == medio) {
-			//implementar Novo Jogo Médio
+			frame.setSize(600, 600);
+			for (int i=1; i<=168; i++) {
+				button = new JButton(i + "");
+				panelMedio.add(button);
+			}
+			frame.add(panelMedio);
+
 		} else if (e.getSource() == dificil) {
-			//implementar Novo Jogo Difícil
+			frame.setSize(850, 850);
+			for (int i=1; i<=288; i++) {
+				button = new JButton(i + "");
+				panelDificil.add(button);
+			}
+			frame.add(panelDificil);
+
 		} else if (e.getSource() == historico) {
 			telaHistorico.setVisible(true);
 		} else if (e.getSource() == sobre) {

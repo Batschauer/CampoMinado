@@ -1,5 +1,8 @@
 package campominado;
 
+import java.sql.Date;
+import java.sql.Time;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,21 +15,21 @@ import org.hibernate.annotations.GenericGenerator;
 public class Historico {
 
 	int id;
-    String data;
-    String duracao;
+    Date data;
+    Time duracao;
     String dificuldade;
 
     public Historico () {}
     
-    public Historico (int id, String data, String duracao, String dificuldade) {
+    public Historico (int id, Date data, Time duracao, String dificuldade) {
         super();
         this.id = id;
         this.data = data;
         this.duracao = duracao;
         this.dificuldade = dificuldade;
     }
-	
-    @Id
+
+	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
 	public int getId() {
@@ -35,13 +38,26 @@ public class Historico {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public Date getData() {
+		return data;
+	}
+	public void setData(Date data) {
+		this.data = data;
+	}
+
+	public Time getDuracao() {
+		return duracao;
+	}
+	public void setDuracao(Time duracao) {
+		this.duracao = duracao;
+	}
+
+	public String getDificuldade() {
+		return dificuldade;
+	}
+	public void setDificuldade(String dificuldade) {
+		this.dificuldade = dificuldade;
+	}
     
 }
-
-
-/*
-(avaliar melhor classe) data
-(avaliar melhor classe) duracao
-(criar um enum dificuldade) dificuldade
-
---> Criar construtores (gets e sets) das outras classes depois de definir o tipo */

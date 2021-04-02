@@ -18,7 +18,7 @@ public class TelaSobre extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		panel = new JPanel(new GridLayout(1,1));
 		
-		icon = new ImageIcon("img/sobre.png");	//para deixar igual o do professor alterar o sobre para cm
+		icon = new ImageIcon("img/sobre.png");
 		panel.add(imagem = new JLabel(icon));
 		
 		buttonFechar = new JButton("Fechar");
