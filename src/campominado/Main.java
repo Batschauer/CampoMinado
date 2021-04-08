@@ -1,17 +1,19 @@
+package campominado;
 import javax.swing.SwingUtilities;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		SwingUtilities.invokeLater(new Runnable ()
-		{
+		SwingUtilities.invokeLater(new Runnable() {
+
 			@Override
-			public void run()
-			{
-				System.out.println("Hello World");
+			public void run() {
+				new TelaInicial();
 			}
+			
 		});
+
 	}
 
 }
