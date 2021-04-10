@@ -1,17 +1,16 @@
 package campominado;
 
-import java.sql.PreparedStatement;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 
 public class HistoricoDAO {
 
-	public void AdicionarHistorico(Historico historico)
-	{
+	public void AdicionarHistorico(Historico historico) {
 		Hibernate hibernate = new Hibernate();
 
 		Session session = hibernate.getSessionFactory().openSession();
@@ -22,41 +21,50 @@ public class HistoricoDAO {
 		session.getTransaction().commit();
 		session.close();
 	}
-	
-	public List<Historico> BuscarHistoricos(int index, Historico historico)
-	{
+
+	public List<Historico> BuscarHistoricos(int index, Historico historico) {
 		String sql = "select * from Historico";
-		
-		if (index != 0 && historico != null)
-		{
+
+		if (index != 0 || historico != null) {
 			sql += " where";
-			
+
 			if (index != 0)
-				sql += " id=?";
-			
+				sql += " id=:id";
+
 			if (historico != null)
-				sql += " dificuldade=?";
+				sql += " dificuldade=:diff";
 		}
-		
-		sql += ";";
-		
+
 		Hibernate hibernate = new Hibernate();
-		
+
 		Session session = hibernate.getSessionFactory().openSession();
 		session.beginTransaction();
-		
+
 		Query SQLQuery = session.createSQLQuery(sql);
-		
 		if (index != 0)
-			SQLQuery.setParameter(0, index);
+			SQLQuery.setParameter("id", historico.getId());
+		
 		if (historico != null)
-			SQLQuery.setParameter(1, historico.getDificuldade());
-		
-		List resultList = SQLQuery.getResultList();
-		
+			SQLQuery.setParameter("diff", historico.getDificuldade());
+
+		ArrayList<Historico> historicos = new ArrayList<Historico>();
+
+		List<Object[]> resultList = SQLQuery.getResultList();
+		for (Object[] object : resultList) {
+
+			Object[] aux = object;
+			Historico his = new Historico();
+
+			his.setId((Integer) aux[0]);
+			his.setData((Date) aux[1]);
+			his.setDuracao((Time) aux[2]);
+			his.setDificuldade((String) aux[3]);
+			historicos.add(his);
+		}
+
 		session.getTransaction().commit();
 		session.close();
 
-		return (List<Historico>) resultList;
-	}	
+		return historicos;
+	}
 }
