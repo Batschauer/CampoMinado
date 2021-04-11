@@ -120,7 +120,7 @@ public class TelaInicial implements ActionListener {
 		panelDificil.removeAll();
 		buttons.clear();
 		
-		frame.setSize(0,0);
+		frame.setSize(620, 410);
 		
 		if (e.getSource() == facil) {
 			
@@ -165,7 +165,5 @@ public class TelaInicial implements ActionListener {
 		} else if (e.getSource() == sair) {
 			System.exit(0);
 		}
-		
 	}
-	
 }
