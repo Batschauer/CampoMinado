@@ -227,100 +227,150 @@ public class ControleJogo implements ActionListener {
 
 		return null;
 	}
-
-	private void revelarLinha(Posicao pos, char operacao) {
+	
+	private Posicao tratarDiagonaisBordaNumeros(Posicao pos, char operacao) {
 		
 		Posicao verifica = null;
 		
-		int limiteSup = -1;
-
-		for (int idx = pos.col; (idx < nCols) && (limiteSup == -1); idx++) {
-			verifica = procurarPor(pos.row, idx);
-			if (verifica != null) {
-				if (verifica.isBomb || verifica.bombCount > 1)
-					limiteSup = verifica.col;
-				else if (verifica.bombCount == 1)
+		switch (operacao) {
+		
+			case '-':
+			{
+				//esquerda superior
 				{
-					verifica = procurarPor(pos.row, idx + 1);
-					if (verifica != null && !verifica.isBomb)
-						continue;
+					verifica = procurarPor(pos.row - 1, pos.col - 1);
+					if (verifica != null && verifica.isBomb) {
+						
+						Posicao posicaoCanto = procurarPor(pos.row, pos.col - 1);  //esquerda (faz o canto)
+						if (posicaoCanto != null && !posicaoCanto.isBomb)
+							return posicaoCanto;
+							
+						return null;
+					}
 				}
-			}	
-		}
-
-		int limiteInf = -1;
-
-		for (int idx = pos.col; (idx >= 0) && (limiteInf == -1); idx--) {
-			verifica = procurarPor(pos.row, idx);
-			if (verifica != null) {
-				if (verifica.isBomb || verifica.bombCount > 1)
-					limiteInf = verifica.col;
-				else if (verifica.bombCount == 1)
+				
+				//esquerda inferior
 				{
-					verifica = procurarPor(pos.row, idx - 1);
-					if (verifica != null && !verifica.isBomb)
-						continue;
+					verifica = procurarPor(pos.row + 1, pos.col - 1);
+					if (verifica != null && verifica.isBomb) {
+						
+						Posicao posicaoCanto = procurarPor(pos.row, pos.col - 1); //esquerda (faz o canto)
+						if (posicaoCanto != null && !posicaoCanto.isBomb)
+							return posicaoCanto;
+							
+						return null;
+					}
 				}
 			}
+			break;
+
+			case '+':
+			{
+				//direita superior
+				{
+					verifica = procurarPor(pos.row - 1, pos.col + 1);
+					if (verifica != null && verifica.isBomb) {
+						
+						Posicao posicaoCanto = procurarPor(pos.row, pos.col + 1); //direita (faz o canto)
+						if (posicaoCanto != null && !posicaoCanto.isBomb)
+							return posicaoCanto;
+								
+						return null; 
+					}
+				}
+				
+				//direita inferior
+				{
+					verifica = procurarPor(pos.row + 1, pos.col + 1);
+					if (verifica != null && verifica.isBomb) {
+						Posicao posicaoCanto = procurarPor(pos.row, pos.col + 1); //direita (faz o canto)
+						if (posicaoCanto != null && !posicaoCanto.isBomb)
+							return posicaoCanto;
+								
+						return null;
+					}
+				}
+			}
+			break;
 		}
 		
-		if (limiteSup == -1)
-			limiteSup = nCols;
+		return null;
+	}
+
+	private void liberarEspacoLinhas(Posicao pos) {
 		
-		if (limiteInf == -1)
-			limiteInf = 0;
+		pos.isRevealed = true;
 		
+		boolean encontrouBorbaNumero = false;
 		
-		for (int idx = limiteInf; idx < limiteSup; idx++)
+		// esquerda
+		for (int idx = pos.col - 1; (idx >= 0) && !encontrouBorbaNumero; idx--)
 		{
-			verifica = procurarPor(pos.row, idx);
-			if (verifica != null && !verifica.isBomb) {
-				verifica.isRevealed = true;
-			}
-		}
-	}
-
-	private void revelar(Posicao pos) {
-
-		Posicao verifica = null;
-
-		int limiteSup = -1;
-
-		for (int idx = pos.row; (idx < nRows) && (limiteSup == -1); idx++) {
-			verifica = procurarPor(idx, pos.col);
+			Posicao verifica = procurarPor(pos.row, idx);
 			if (verifica != null) {
 				if (verifica.isBomb)
-					limiteSup = verifica.row;
-			}	
-		}
-
-		int limiteInf = -1;
-
-		for (int idx = pos.row; (idx >= 0) && (limiteInf == -1); idx--) {
-			verifica = procurarPor(idx, pos.col);
-			if (verifica != null) {
-				if (verifica.isBomb)
-					limiteInf = verifica.row;
+					encontrouBorbaNumero = true;
+				else if (verifica.bombCount != 0)
+				{
+					Posicao posDiagonalComBomba = tratarDiagonaisBordaNumeros(verifica, '-');
+					if (posDiagonalComBomba != null)
+					{
+						posDiagonalComBomba.isRevealed = true;
+						encontrouBorbaNumero = true;
+					}
+					
+					verifica.isRevealed = true;
+				}
+				else
+					verifica.isRevealed = true;
 			}
 		}
-
-		if (limiteSup == -1)
-			limiteSup = nRows;
-
-		if (limiteInf == -1)
-			limiteInf = 0;
-
-		verifica = null;
-
-		for (int idx = limiteInf; idx < limiteSup; idx++) {
-			
-			verifica = procurarPor(idx, pos.col);
-			
-			revelarLinha(verifica, '-');
+		
+		encontrouBorbaNumero = false;
+		
+		// direita
+		for (int idx = pos.col + 1; (idx < nCols) && !encontrouBorbaNumero; idx++)
+		{
+			Posicao verifica = procurarPor(pos.row, idx);
+			if (verifica != null) {
+				if (verifica.isBomb)
+					encontrouBorbaNumero = true;
+				else if (verifica.bombCount != 0)
+				{
+					Posicao posDiagonalComBomba = tratarDiagonaisBordaNumeros(verifica, '+');
+					if (posDiagonalComBomba != null)
+					{
+						posDiagonalComBomba.isRevealed = true;
+						encontrouBorbaNumero = true;
+					}
+					
+					verifica.isRevealed = true;
+				}
+				else
+					verifica.isRevealed = true;
+			}
 		}
-
+		
+		// para cima
+		{
+			Posicao verifica = procurarPor(pos.row - 1, pos.col);
+			if (verifica != null && !verifica.isBomb && !verifica.isRevealed)
+			{
+				liberarEspacoLinhas(verifica);
+			}
+		}
+		
+		// para baixo
+		{
+			Posicao verifica = procurarPor(pos.row + 1, pos.col);
+			if (verifica != null && !verifica.isBomb && !verifica.isRevealed)
+			{
+				liberarEspacoLinhas(verifica);
+			}
+		}
+		
 	}
-
+	
 	private boolean ehBomba(Posicao pos) {
 		if (pos.isBomb)
 		{
@@ -328,7 +378,9 @@ public class ControleJogo implements ActionListener {
 			return true;
 		}
 		
-		revelar(pos);
+		if (pos.bombCount == 0) {
+			liberarEspacoLinhas(pos);
+		}
 		
 		pos.isRevealed = true;
 
