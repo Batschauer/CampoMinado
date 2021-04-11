@@ -120,6 +120,8 @@ public class TelaInicial implements ActionListener {
 		panelDificil.removeAll();
 		buttons.clear();
 		
+		frame.setSize(0,0);
+		
 		if (e.getSource() == facil) {
 			
 			frame.setSize(600, 600);
