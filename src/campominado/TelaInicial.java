@@ -2,6 +2,8 @@ package campominado;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,7 +21,9 @@ public class TelaInicial implements ActionListener {
 	TelaSobre telaSobre;
 	TelaHistorico telaHistorico;
 	JPanel panelFacil, panelMedio, panelDificil;
-	JButton button;
+	ArrayList<JButton> buttons;
+	
+	private ControleJogo jogo = null;
 	
 	public TelaInicial () {
 		
@@ -69,8 +73,43 @@ public class TelaInicial implements ActionListener {
 		panelMedio = new JPanel(new GridLayout (12, 14));
 		panelDificil = new JPanel(new GridLayout (16, 18));
 		
+		buttons = new ArrayList<JButton>();
+		
 	}
+	
+	public void gerarBotoes(int dificuldade, ControleJogo jogo)
+	{
+		int nBotoes = 0;
+		
+		switch (dificuldade) {
+		
+		case ControleJogo.FACIL: nBotoes = ControleJogo.QTD_CAMPOS_FACIL; break;
 
+		case ControleJogo.MEDIO: nBotoes = ControleJogo.QTD_CAMPOS_MEDIO; break;
+			
+		case ControleJogo.DIFICIL: nBotoes = ControleJogo.QTD_CAMPOS_DIFICIL; break;
+		}
+		
+		JButton btn = null;
+		
+		for (int idx = 1; idx <= nBotoes; idx++) {
+			
+			btn = new JButton();
+			btn.addActionListener(jogo);
+			btn.setActionCommand(idx + "");
+			
+			buttons.add(btn);
+			
+			switch (dificuldade) {
+			
+			case ControleJogo.FACIL: panelFacil.add(btn); break;
+			case ControleJogo.MEDIO: panelMedio.add(btn); break;
+			case ControleJogo.DIFICIL: panelDificil.add(btn); break;
+			
+			}
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -79,30 +118,43 @@ public class TelaInicial implements ActionListener {
 		panelFacil.removeAll();
 		panelMedio.removeAll();
 		panelDificil.removeAll();
+		buttons.clear();
 		
 		if (e.getSource() == facil) {
-			frame.setSize(400, 400);
-			for (int i=1; i<=80; i++) {
-				button = new JButton(i + "");
-				panelFacil.add(button);
-			}
+			
+			frame.setSize(600, 600);
+			
+			jogo = new ControleJogo(this, ControleJogo.FACIL);
+			
+			gerarBotoes(ControleJogo.FACIL, jogo);
+			
 			frame.add(panelFacil);
+			
+			jogo.preencherCampo();
 
 		} else if (e.getSource() == medio) {
-			frame.setSize(600, 600);
-			for (int i=1; i<=168; i++) {
-				button = new JButton(i + "");
-				panelMedio.add(button);
-			}
+			
+			frame.setSize(800, 800);
+			
+			jogo = new ControleJogo(this, ControleJogo.MEDIO);
+			
+			gerarBotoes(ControleJogo.MEDIO, jogo);
+			
 			frame.add(panelMedio);
+			
+			jogo.preencherCampo();
 
 		} else if (e.getSource() == dificil) {
-			frame.setSize(850, 850);
-			for (int i=1; i<=288; i++) {
-				button = new JButton(i + "");
-				panelDificil.add(button);
-			}
+			
+			frame.setSize(1000, 1000);
+			
+			jogo = new ControleJogo(this, ControleJogo.DIFICIL);
+			
+			gerarBotoes(ControleJogo.DIFICIL, jogo);
+			
 			frame.add(panelDificil);
+			
+			jogo.preencherCampo();
 
 		} else if (e.getSource() == historico) {
 			telaHistorico.setVisible(true);
