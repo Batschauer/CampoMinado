@@ -10,7 +10,7 @@ create table Historico(
 );
 
 desc Historico;
-select * from Historico order by dificuldade;
+select * from Historico order by data;
 
 insert into Historico (data, duracao, dificuldade) values (
 	'2021-04-10',

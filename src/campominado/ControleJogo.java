@@ -43,28 +43,36 @@ public class ControleJogo implements ActionListener {
 	private List<Posicao> campo;
 	
 	private TelaInicial tela;
+	
+	private ControleHistorico controleHistorico;
+	private boolean iniciouContagem = false;
 
 	public ControleJogo(TelaInicial tela, int dificuldade) {
 		this.tela = tela;
 		
 		this.dificuldade = dificuldade;
-
+		
+		String sDificuldade = "";
+		
 		switch (dificuldade) {
 		case FACIL: {
 			nRows = NROWS_FACIL;
 			nCols = NCOLS_FACIL;
+			sDificuldade = "Facil";
 		}
 			break;
 
 		case MEDIO: {
 			nRows = NROWS_MEDIO;
 			nCols = NCOLS_MEDIO;
+			sDificuldade = "Medio";
 		}
 			break;
 
 		case DIFICIL: {
 			nRows = NROWS_DIFICIL;
 			nCols = NCOLS_DIFICIL;
+			sDificuldade = "Dificil";
 		}
 			break;
 		}
@@ -72,6 +80,8 @@ public class ControleJogo implements ActionListener {
 		nRowsCols = nRows * nCols;
 
 		campo = new ArrayList<Posicao>(nRowsCols);
+		
+		controleHistorico = new ControleHistorico(sDificuldade);
 	}
 
 	private void demarcarProximidas(Posicao pos) {
@@ -180,7 +190,9 @@ public class ControleJogo implements ActionListener {
 		}
 			break;
 		}
-
+		
+		System.out.println(nBombas);
+		
 		while (bombas.size() < nBombas) {
 			int id = rand.nextInt(nRowsCols + 1);
 
@@ -430,6 +442,13 @@ public class ControleJogo implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (!iniciouContagem)
+		{
+			controleHistorico.iniciar();
+			
+			iniciouContagem = true;
+		}
+		
 		Integer id = Integer.parseInt(e.getActionCommand());
 		
 		Posicao pos = campo.get(id - 1);
@@ -440,13 +459,19 @@ public class ControleJogo implements ActionListener {
 			
 			atualizarBotoes();
 			
+			controleHistorico.finalizar();
+			
 			JOptionPane.showMessageDialog(null, "Perdeu :(");
 		}
-		else if (ganhou())
+		
+		if (ganhou())
 		{
 			mostrarTudo();
 			
 			atualizarBotoes();
+			
+			controleHistorico.finalizar();
+			controleHistorico.salvar();
 			
 			JOptionPane.showMessageDialog(null, "Parabéns!");
 		}
